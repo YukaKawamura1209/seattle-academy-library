@@ -22,7 +22,7 @@ public class UsersService {
 
     /**
      * ユーザー情報を登録する
-     * @param userInfo ユーザー情報
+     * @param userInfo ユーザー情報r
      */
     public void registUser(UserInfo userInfo) {
 
@@ -44,11 +44,15 @@ public class UsersService {
      */
     public UserInfo selectUserInfo(String email, String password) {
         // TODO SQL生成
-        String sql = "";
-
-        UserInfo selectedUserInfo = jdbcTemplate.queryForObject(sql, new UserCountRowMapper());
-        return selectedUserInfo;
-
+        String sql = "select email,password from users where email= '"+ email +  "'and password= '"+ password + "'";
+        System.out.println(sql);
+        
+        try {
+            UserInfo selectedUserInfo = jdbcTemplate.queryForObject(sql, new UserCountRowMapper());
+            return selectedUserInfo;
+        } catch (Exception e) {
+            return null ;
+        }
     }
 
 }
