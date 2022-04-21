@@ -32,7 +32,7 @@ public class LoginController {
 
 	/**
 	 * ログイン処理
-	 *
+	 *R
 	 * @param email    メールアドレス
 	 * @param password パスワード
 	 * @param model
