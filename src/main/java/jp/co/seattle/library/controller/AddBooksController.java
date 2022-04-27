@@ -1,5 +1,7 @@
 package jp.co.seattle.library.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -53,16 +55,25 @@ public class AddBooksController {
             @RequestParam("author") String author,
             @RequestParam("publisher") String publisher,
             @RequestParam("thumbnail") MultipartFile file,
+            @RequestParam("publishDate") String publishDate ,
+            @RequestParam("isbn") String isbn ,
+            @RequestParam("description") String description ,
             Model model) {
         logger.info("Welcome insertBooks.java! The client locale is {}.", locale);
 
+        
+        
         // パラメータで受け取った書籍情報をDtoに格納する。
         BookDetailsInfo bookInfo = new BookDetailsInfo();
         bookInfo.setTitle(title);
         bookInfo.setAuthor(author);
         bookInfo.setPublisher(publisher);
+        bookInfo.setPublishDate(publishDate); 
+        bookInfo.setIsbn(isbn); 
+        bookInfo.setDescription(description); 
 
         // クライアントのファイルシステムにある元のファイル名を設定する
+       
         String thumbnail = file.getOriginalFilename();
 
         if (!file.isEmpty()) {
@@ -84,15 +95,44 @@ public class AddBooksController {
             }
         }
 
-        // 書籍情報を新規登録する
+//        // 書籍情報を新規登録する
+        List<String> lists = new ArrayList<String>();   
+          
+     if( title.isEmpty() || author.isEmpty() || publisher.isEmpty() || publishDate.isEmpty()){
+        lists.add("入力必須項目があります");
+        }
+     if ( publishDate.isEmpty() || publishDate.length()!= 8 || !(publishDate.matches("^[0-9]*$"))){
+        lists.add("出版日または半角数字のYYYYMMDD形式で入力してください");
+        }
+        
+   
+        if(isbn.length() !=10 && isbn.length()!=13 && isbn.length()!= 0 || !(isbn.matches("^[0-9]*$"))) {
+        lists.add("ISBNの桁数または半角数字が正しくありません");
+             }   
+        
+
+     
+     if(lists.isEmpty()) {
+        	
         booksService.registBook(bookInfo);
-
-        model.addAttribute("resultMessage", "登録完了");
-
-        // TODO 登録した書籍の詳細情報を表示するように実装
+        int bookId = booksService.getmaxbookid();
+        booksService.getBookInfo(bookId);
+        BookDetailsInfo  bookDetailsInfo = booksService.getBookInfo(bookId);
+        
+        model.addAttribute("bookDetailsInfo", bookDetailsInfo);
+        
+        
+    } else {
+       model.addAttribute("error",lists);
+       model.addAttribute("bookInfo",bookInfo);
+       return "addBook";
+     }
        
-        //  詳細画面に遷移する
-        return "details";
+        
+     return "details";
+      
+       
     }
 
 }
+    
