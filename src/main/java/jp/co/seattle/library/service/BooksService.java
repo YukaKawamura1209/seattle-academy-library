@@ -93,26 +93,37 @@ public class BooksService {
 	 return bookId;
  }
  
+ /**
+
+ 書籍情報を更新する
+ @param locale ローケル情報
+ @param title 書籍名
+ @param author 著者名
+ @param publisher 出版社
+ @param publish_date 出版日
+ @param file サムネファイル
+ @palam model モデル
+ @param isbn コード
+ @param bio 説明文
+ @param id 書籍ID
+ @return 遷移先画面
+ */
+ 
  public void updateBook(BookDetailsInfo bookInfo) {
-   String sql;
-		if (bookInfo.getThumbnailUrl() == null) {
-			sql = "update books set title ='" + bookInfo.getTitle() + "', author ='" + bookInfo.getAuthor()
+   String sql = "update books set title ='" + bookInfo.getTitle() + "', author ='" + bookInfo.getAuthor()
 					+ "' , publisher ='" + bookInfo.getPublisher() + "', publish_date ='" + bookInfo.getPublishDate()
 					+ "' , upd_date = 'now()'" + ",isbn = '" + bookInfo.getIsbn() + "', description= '"
 					+ bookInfo.getDescription() + "' where id =" + bookInfo.getBookId() + ";";
-		} else {
-			sql = "update books set title ='" + bookInfo.getTitle() + "', author ='" + bookInfo.getAuthor()
-					+ "' , publisher ='" + bookInfo.getPublisher() + "', publish_date ='" + bookInfo.getPublishDate()
-					+ "' , thumbnail_url ='" + bookInfo.getThumbnailUrl() + "', thumbnail_name ='"
-					+ bookInfo.getThumbnailName() + "' , upd_date = 'now()'" + ",isbn = '" + bookInfo.getIsbn()
-					+ "', description = '" + bookInfo.getDescription() + "' where id =" + bookInfo.getBookId() + ";";
-		}
+		
+		
 
 		jdbcTemplate.update(sql);
-	}
+		
+ }
+	
+}
      
 
-    
-}
+   
 
     
