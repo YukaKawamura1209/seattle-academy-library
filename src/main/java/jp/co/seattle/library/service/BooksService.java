@@ -93,7 +93,25 @@ public class BooksService {
 	 return bookId;
  }
  
- 
+ public void updateBook(BookDetailsInfo bookInfo) {
+   String sql;
+		if (bookInfo.getThumbnailUrl() == null) {
+			sql = "update books set title ='" + bookInfo.getTitle() + "', author ='" + bookInfo.getAuthor()
+					+ "' , publisher ='" + bookInfo.getPublisher() + "', publish_date ='" + bookInfo.getPublishDate()
+					+ "' , upd_date = 'now()'" + ",isbn = '" + bookInfo.getIsbn() + "', description= '"
+					+ bookInfo.getDescription() + "' where id =" + bookInfo.getBookId() + ";";
+		} else {
+			sql = "update books set title ='" + bookInfo.getTitle() + "', author ='" + bookInfo.getAuthor()
+					+ "' , publisher ='" + bookInfo.getPublisher() + "', publish_date ='" + bookInfo.getPublishDate()
+					+ "' , thumbnail_url ='" + bookInfo.getThumbnailUrl() + "', thumbnail_name ='"
+					+ bookInfo.getThumbnailName() + "' , upd_date = 'now()'" + ",isbn = '" + bookInfo.getIsbn()
+					+ "', description = '" + bookInfo.getDescription() + "' where id =" + bookInfo.getBookId() + ";";
+		}
+
+		jdbcTemplate.update(sql);
+	}
+     
+
     
 }
 
