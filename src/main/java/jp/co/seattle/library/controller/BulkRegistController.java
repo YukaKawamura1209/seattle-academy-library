@@ -64,7 +64,7 @@ public class BulkRegistController {
 			List<BookDetailsInfo> bookLists = new ArrayList<BookDetailsInfo>();
 			
 			if (!br.ready()) {
-				model.addAttribute("errorMassage", "CSVに書籍情報がありません");
+				model.addAttribute("errorMessages", "CSVに書籍情報がありません");
 				return "BulkRegist";
 			}
 			while ((line = br.readLine()) != null) {
