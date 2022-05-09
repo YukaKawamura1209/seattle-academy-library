@@ -126,7 +126,7 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 		
  }
-
+ 
  public void BulkRegist(BookDetailsInfo bookInfo) {
 
      String sql = "INSERT INTO books (title,author,publisher,publish_date,isbn,description,reg_date,upd_date) VALUES ('"
@@ -143,7 +143,22 @@ public class BooksService {
      
      
  }
+ 
+ public void rentBook(int bookId) {
+                  
+     String sql = "INSERT INTO rentbooks (book_id) select " + bookId +  "where NOT EXISTS (select book_id from rentbooks where book_id=" + bookId + ")";
+     
+     jdbcTemplate.update(sql);
 
+}
+ 
+ public int count () {
+	 String sql = "select count (*) book_id from rentbooks";
+	 
+	 return jdbcTemplate.queryForObject(sql , int.class);
+ }
+ 
+ 
 }
  
  
