@@ -43,10 +43,7 @@
                     </a>
                 </div>
                <c:if test="${!empty rentMessage}">
-            <div class ="error">
-           <c:forEach var="error" items="${rentMessage}">
-               <p> ${error} </p>
-           </c:forEach>
+            <div class ="error">${rentMessage}
          </div>
         </c:if>
             </div>
