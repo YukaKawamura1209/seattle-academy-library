@@ -38,22 +38,36 @@ public class BooksService {
 
         return getedBookList;
     }
-
     /**
      * 書籍IDに紐づく書籍詳細情報を取得する
+    *
+    * @param bookId 書籍ID
+    * @return 書籍情報
+    */
+   public BookDetailsInfo getBookInfo(int bookId) {
+
+       // JSPに渡すデータを設定する
+       String sql = "SELECT * FROM books where id ="
+               + bookId;
+
+       BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
+
+       return bookDetailsInfo;
+   }
+
+    /**
+     * rentbooksにbookIdが入っている数を取得する
      *
      * @param bookId 書籍ID
      * @return 書籍情報
      */
-    public BookDetailsInfo getBookInfo(int bookId) {
+    public int getBooklentnumber(int bookId) {
 
         // JSPに渡すデータを設定する
-        String sql = "SELECT * FROM books where id ="
-                + bookId;
+        String sql = "SELECT COUNT (*) FROM books left outer join rentbooks on books.id = rentbooks.book_id where rentbooks.book_id=" + bookId;
+         int booklentnumber = jdbcTemplate.queryForObject(sql,Integer.class);
 
-        BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
-
-        return bookDetailsInfo;
+        return booklentnumber;
     }
 
     /**
@@ -182,8 +196,8 @@ public class BooksService {
 }
 
 
- 
-}
+
+  }
 
  
  
