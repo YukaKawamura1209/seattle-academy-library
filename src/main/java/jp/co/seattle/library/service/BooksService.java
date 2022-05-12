@@ -70,6 +70,13 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 
 	}
+	
+	/**
+	 * 書籍を削除する
+	 *
+	 * @param bookId 書籍ID
+	 *
+	 */
 
 	public void deleteBook(int bookId) {
 
@@ -136,6 +143,13 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 
 	}
+	
+	/**
+	 * 書籍を貸出する
+	 *
+	 * @param bookId 書籍ID
+	 */
+	
 
 	public void rentBook(int bookId) {
 
@@ -145,7 +159,18 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 
 	}
+	
+	
 
+	/**
+	 *行数を取得する
+	 *
+	 * @param bookId 書籍ID
+	 * @return 
+	 */
+
+	
+	
 	public int count() {
 		String sql = "select count (*) book_id from rentbooks";
 
