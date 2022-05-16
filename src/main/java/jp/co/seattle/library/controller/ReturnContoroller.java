@@ -38,9 +38,9 @@ public class ReturnContoroller {
             Model model) {
         
     	
-    	int count2 = booksService.size (bookId);
+    	int rentcount = booksService.size (bookId);
     	
-        if (count2 == 1) {
+        if (rentcount == 1) {
         booksService.Returnbooks(bookId);
        
         } else {

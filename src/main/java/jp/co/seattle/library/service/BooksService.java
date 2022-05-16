@@ -72,17 +72,11 @@ public class BooksService {
 		
  }
  
-
  /**
-  * 一括登録をする
+  * 書籍ををする
   *
   * @param bookInfo 書籍情報
   */
- 
-
- 
- 
- 
  
  public void Returnbooks (int bookId) {
 
@@ -97,12 +91,6 @@ public class BooksService {
 	 return jdbcTemplate.queryForObject(sql , int.class);
  
 }
-
- 
- 
-
-
-	
 	
 	/**
 	 * 書籍を削除する
