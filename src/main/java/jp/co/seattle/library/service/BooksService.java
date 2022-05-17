@@ -38,20 +38,20 @@ public class BooksService {
 
 		return getedBookList;
 	}
-	
+
 	/**
 	 * 書籍を検索
 	 *
 	 * @param title
 	 * @return 書籍リスト
 	 */
-	
+
 	public List<BookInfo> search(String title) {
 
 		// TODO 取得したい情報を取得するようにSQLを修正
-		List<BookInfo> getedBookList = jdbcTemplate.query(
-				"select id,title,author,publisher,publish_date,thumbnail_url from books where title like '%" + title + "%' order by title ASC",
-				new BookInfoRowMapper());
+		List<BookInfo> getedBookList = jdbcTemplate
+				.query("select id,title,author,publisher,publish_date,thumbnail_url from books where title like '%"
+						+ title + "%' order by title ASC", new BookInfoRowMapper());
 
 		return getedBookList;
 	}
@@ -85,30 +85,28 @@ public class BooksService {
 				+ "','" + bookInfo.getIsbn() + "','" + bookInfo.getDescription() + "'," + "now()," + "now())";
 
 		jdbcTemplate.update(sql);
+	}
 
-		
- }
- 
- /**
-  * 書籍ををする
-  *
-  * @param bookInfo 書籍情報
-  */
- 
- public void Returnbooks (int bookId) {
+	/**
+	 * 書籍ををする
+	 *
+	 * @param bookInfo 書籍情報
+	 */
 
-	 String sql = "DELETE  FROM rentbooks WHERE book_id=" + bookId ;
-	  jdbcTemplate.update(sql);
- 
-}
+	public void Returnbooks(int bookId) {
 
- public int size (int bookId) {
-	 String sql = "select count (*) from rentbooks WHERE book_id=" + bookId;
-	 
-	 return jdbcTemplate.queryForObject(sql , int.class);
- 
-}
-	
+		String sql = "DELETE  FROM rentbooks WHERE book_id=" + bookId;
+		jdbcTemplate.update(sql);
+
+	}
+
+	public int size(int bookId) {
+		String sql = "select count (*) from rentbooks WHERE book_id=" + bookId;
+
+		return jdbcTemplate.queryForObject(sql, int.class);
+
+	}
+
 	/**
 	 * 書籍を削除する
 	 *
@@ -162,8 +160,6 @@ public class BooksService {
 				+ bookInfo.getDescription() + "' where id =" + bookInfo.getBookId() + ";";
 
 		jdbcTemplate.update(sql);
-
-
 	}
 
 	/**
@@ -180,15 +176,13 @@ public class BooksService {
 				+ "now())";
 
 		jdbcTemplate.update(sql);
-
 	}
-	
+
 	/**
 	 * 書籍を貸出する
 	 *
 	 * @param bookId 書籍ID
 	 */
-	
 
 	public void rentBook(int bookId) {
 
@@ -198,26 +192,22 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 
 	}
-	
-	
 
 	/**
-	 *行数を取得する
+	 * 行数を取得する
 	 *
 	 * @param bookId 書籍ID
-	 * @return 
+	 * @return
 	 */
 
-	
-	
 	public int count() {
 		String sql = "select count (*) book_id from rentbooks";
 
 		return jdbcTemplate.queryForObject(sql, int.class);
 	}
 
-	public int getBooklentnumber (int bookId) {
-	     String sql="select count (*) from rentbooks where book_id=" + bookId;
-			return jdbcTemplate.queryForObject(sql,int.class);
-}
+	public int getBooklentnumber(int bookId) {
+		String sql = "select count (*) from rentbooks where book_id=" + bookId;
+		return jdbcTemplate.queryForObject(sql, int.class);
+	}
 }
