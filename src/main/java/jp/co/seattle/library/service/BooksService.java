@@ -20,6 +20,7 @@ import jp.co.seattle.library.rowMapper.BookInfoRowMapper;
  */
 @Service
 public class BooksService {
+
 	final static Logger logger = LoggerFactory.getLogger(BooksService.class);
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -56,6 +57,27 @@ public class BooksService {
 		return getedBookList;
 	}
 
+    /**
+     * 書籍を登録する
+     *
+     * @param bookInfo 書籍情報
+     */
+    public void registBook(BookDetailsInfo bookInfo) {
+
+        String sql = "INSERT INTO books (title,author,publisher,publish_date,thumbnail_name,thumbnail_url,isbn,description,reg_date,upd_date) VALUES ('"
+                + bookInfo.getTitle() + "','" 
+        		+ bookInfo.getAuthor() + "','" 
+                + bookInfo.getPublisher() + "','" 
+        		+ bookInfo.getPublishDate() + "','"
+                + bookInfo.getThumbnailName() + "','"
+                + bookInfo.getThumbnailUrl() + "','"
+                + bookInfo.getIsbn() + "','"
+                + bookInfo.getDescription() + "',"
+                + "now(),"
+                + "now())";
+
+        jdbcTemplate.update(sql);       
+    }
 	/**
 	 * 書籍IDに紐づく書籍詳細情報を取得する
 	 *
@@ -73,21 +95,6 @@ public class BooksService {
 	}
 
 	/**
-	 * 書籍を登録する
-	 *
-	 * @param bookInfo 書籍情報
-	 */
-	public void registBook(BookDetailsInfo bookInfo) {
-
-		String sql = "INSERT INTO books (title,author,publisher,publish_date,thumbnail_name,thumbnail_url,isbn,description,reg_date,upd_date) VALUES ('"
-				+ bookInfo.getTitle() + "','" + bookInfo.getAuthor() + "','" + bookInfo.getPublisher() + "','"
-				+ bookInfo.getPublishDate() + "','" + bookInfo.getThumbnailName() + "','" + bookInfo.getThumbnailUrl()
-				+ "','" + bookInfo.getIsbn() + "','" + bookInfo.getDescription() + "'," + "now()," + "now())";
-
-		jdbcTemplate.update(sql);
-	}
-
-	/**
 	 * 書籍ををする
 	 *
 	 * @param bookInfo 書籍情報
@@ -97,13 +104,6 @@ public class BooksService {
 
 		String sql = "DELETE  FROM rentbooks WHERE book_id=" + bookId;
 		jdbcTemplate.update(sql);
-
-	}
-
-	public int size(int bookId) {
-		String sql = "select count (*) from rentbooks WHERE book_id=" + bookId;
-
-		return jdbcTemplate.queryForObject(sql, int.class);
 
 	}
 
@@ -121,6 +121,12 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 	}
 
+ public int size (int bookId) {
+	 String sql = "select count (*) from rentbooks WHERE book_id=" + bookId;
+	 
+	 return jdbcTemplate.queryForObject(sql , int.class);
+ 
+}
 	/**
 	 * 
 	 * 書籍IDに紐づく書籍詳細情報を取得する
@@ -192,7 +198,6 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 
 	}
-
 	/**
 	 * 行数を取得する
 	 *
@@ -205,6 +210,7 @@ public class BooksService {
 
 		return jdbcTemplate.queryForObject(sql, int.class);
 	}
+
 
 	public int getBooklentnumber(int bookId) {
 		String sql = "select count (*) from rentbooks where book_id=" + bookId;
