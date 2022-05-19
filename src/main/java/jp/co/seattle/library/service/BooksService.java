@@ -47,6 +47,7 @@ public class BooksService {
     public int getBooklentnumber(int bookId) {
 
         // JSPに渡すデータを設定する
+
         String sql = "SELECT COUNT (*) FROM books left outer join rentbooks on books.id = rentbooks.book_id where rentbooks.book_id=" + bookId;
          int booklentnumber = jdbcTemplate.queryForObject(sql,Integer.class);
 
@@ -92,9 +93,8 @@ public class BooksService {
 	public BookDetailsInfo getBookInfo(int bookId) {
 
 		// JSPに渡すデータを設定する
-		String sql = "SELECT * FROM books where id =" + bookId;
-
-		BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
+	String sql ="SELECT * , case when book_id is null then '貸出可' else '貸出不可' end as status from books left outer join rentbooks on books.id = rentbooks.book_id where books.id=" + bookId;
+    BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
 
 		return bookDetailsInfo;
 	}
@@ -197,5 +197,4 @@ public class BooksService {
 
 		return jdbcTemplate.queryForObject(sql, int.class);
 	}
-
 }
