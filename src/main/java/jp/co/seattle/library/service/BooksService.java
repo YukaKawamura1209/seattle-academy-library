@@ -20,24 +20,69 @@ import jp.co.seattle.library.rowMapper.BookInfoRowMapper;
  */
 @Service
 public class BooksService {
-	final static Logger logger = LoggerFactory.getLogger(BooksService.class);
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+    final static Logger logger = LoggerFactory.getLogger(BooksService.class);
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	/**
-	 * 書籍リストを取得する
-	 *
-	 * @return 書籍リスト
-	 */
-	public List<BookInfo> getBookList() {
+    /**
+     * 書籍リストを取得する
+     *
+     * @return 書籍リスト
+     */
+    public List<BookInfo> getBookList() {
 
-		// TODO 取得したい情報を取得するようにSQLを修正
-		List<BookInfo> getedBookList = jdbcTemplate.query(
-				"select id,title,author,publisher,publish_date,thumbnail_name,thumbnail_url from books order by title ASC",
-				new BookInfoRowMapper());
+        // TODO 取得したい情報を取得するようにSQLを修正
+        List<BookInfo> getedBookList = jdbcTemplate.query(
+                "select id,title,author,publisher,publish_date,thumbnail_name,thumbnail_url from books order by title ASC",
+                new BookInfoRowMapper());
 
-		return getedBookList;
-	}
+        return getedBookList;
+    }
+    /**
+     * rentbooksにbookIdが入っている数を取得する
+     *
+     * @param bookId 書籍ID
+     * @return 書籍情報
+     */
+    public int getBooklentnumber(int bookId) {
+
+        // JSPに渡すデータを設定する
+
+        String sql = "SELECT COUNT (*) FROM books left outer join rentbooks on books.id = rentbooks.book_id where rentbooks.book_id=" + bookId;
+         int booklentnumber = jdbcTemplate.queryForObject(sql,Integer.class);
+
+        return booklentnumber;
+    }
+
+    /**
+     * 書籍を登録する
+     *
+     * @param bookInfo 書籍情報
+     */
+    public void registBook(BookDetailsInfo bookInfo) {
+
+        String sql = "INSERT INTO books (title,author,publisher,publish_date,thumbnail_name,thumbnail_url,isbn,description,reg_date,upd_date) VALUES ('"
+                + bookInfo.getTitle() + "','" 
+        		+ bookInfo.getAuthor() + "','" 
+                + bookInfo.getPublisher() + "','" 
+        		+ bookInfo.getPublishDate() + "','"
+                + bookInfo.getThumbnailName() + "','"
+                + bookInfo.getThumbnailUrl() + "','"
+                + bookInfo.getIsbn() + "','"
+                + bookInfo.getDescription() + "',"
+                + "now(),"
+                + "now())";
+
+        jdbcTemplate.update(sql);
+        
+        
+    }
+    public void deleteBook(int bookId) {
+
+        String sql = "DELETE FROM books WHERE id =" + bookId;
+      
+        jdbcTemplate.update(sql);     
+    }
 
 	/**
 	 * 書籍IDに紐づく書籍詳細情報を取得する
@@ -48,29 +93,11 @@ public class BooksService {
 	public BookDetailsInfo getBookInfo(int bookId) {
 
 		// JSPに渡すデータを設定する
-		String sql = "SELECT * FROM books where id =" + bookId;
-
-		BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
+	String sql ="SELECT * , case when book_id is null then '貸出可' else '貸出不可' end as status from books left outer join rentbooks on books.id = rentbooks.book_id where books.id=" + bookId;
+    BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
 
 		return bookDetailsInfo;
 	}
-
-	/**
-	 * 書籍を登録する
-	 *
-	 * @param bookInfo 書籍情報
-	 */
-	public void registBook(BookDetailsInfo bookInfo) {
-
-		String sql = "INSERT INTO books (title,author,publisher,publish_date,thumbnail_name,thumbnail_url,isbn,description,reg_date,upd_date) VALUES ('"
-				+ bookInfo.getTitle() + "','" + bookInfo.getAuthor() + "','" + bookInfo.getPublisher() + "','"
-				+ bookInfo.getPublishDate() + "','" + bookInfo.getThumbnailName() + "','" + bookInfo.getThumbnailUrl()
-				+ "','" + bookInfo.getIsbn() + "','" + bookInfo.getDescription() + "'," + "now()," + "now())";
-
-		jdbcTemplate.update(sql);
-
-		
- }
  
  public void Returnbooks (int bookId) {
 
@@ -85,21 +112,6 @@ public class BooksService {
 	 return jdbcTemplate.queryForObject(sql , int.class);
  
 }
-	
-	/**
-	 * 書籍を削除する
-	 *
-	 * @param bookId 書籍ID
-	 *
-	 */
-
-	public void deleteBook(int bookId) {
-
-		String sql = "DELETE FROM books WHERE id =" + bookId;
-
-		jdbcTemplate.update(sql);
-	}
-
 	/**
 	 * 
 	 * 書籍IDに紐づく書籍詳細情報を取得する
@@ -165,7 +177,6 @@ public class BooksService {
 	 * @param bookId 書籍ID
 	 */
 	
-
 	public void rentBook(int bookId) {
 
 		String sql = "INSERT INTO rentbooks (book_id) select " + bookId
@@ -174,22 +185,16 @@ public class BooksService {
 		jdbcTemplate.update(sql);
 
 	}
-	
-	
-
 	/**
 	 *行数を取得する
 	 *
 	 * @param bookId 書籍ID
 	 * @return 
 	 */
-
-	
 	
 	public int count() {
 		String sql = "select count (*) book_id from rentbooks";
 
 		return jdbcTemplate.queryForObject(sql, int.class);
 	}
-
 }

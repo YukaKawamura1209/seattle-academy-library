@@ -49,6 +49,15 @@ public class rentBooksController {
 
         }
         
+        int booklentnumber = booksService.getBooklentnumber (bookId);
+        
+        if (booklentnumber == 0) {
+        	model.addAttribute("statusMessage", "貸出可能");	
+        	 //bookIdが入っていれば貸出不可
+        }else {
+        	model.addAttribute("statusMessage", "貸出中");
+        }
+        
             model.addAttribute("bookDetailsInfo", booksService.getBookInfo(bookId));
     
          
