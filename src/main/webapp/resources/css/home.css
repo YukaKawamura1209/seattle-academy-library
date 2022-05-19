@@ -71,18 +71,31 @@ input {
 }
 
 .search1 {
-    border-radius: 20px 0 0 20px;
     font-size: 15px;
     width: 325px;
     padding: 4px 10px;
     border: 1px solid #2196f3;
 }
 
+.search{
+    justify-content:flex-start;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-start;
+    
+}
+.search2{
+	margin-left: auto;
+}
+.search3{
+	display:inline-flex;
+}
+
 .search1:hover {
     box-shadow: 0 0 2px black;
 }
 
-.search_box:after {
+.search_box:after{
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     content: "\f002";
@@ -91,6 +104,11 @@ input {
     right: 12px;
     color: white;
     pointer-events: none;
+}
+.search_btn{
+	background:#2196f3;
+	width:100px;
+	color: white;
 }
 
 .booklist {
