@@ -42,15 +42,10 @@
                         </c:if> <input type="hidden" name="bookId" value="${bookDetailsInfo.bookId}">
                     </a>
                 </div>
-                <p>${BookDetailsInfo.status}</p>
-                  <c:if test="${!empty statusMessage}">
-            <div>${statusMessage}
-         </div>
-        </c:if>
-               <c:if test="${!empty rentMessage}">
-            <div class ="error">${rentMessage}
-         </div>
-        </c:if>
+                <p>${bookDetailsInfo.status}</p>
+                <c:if test="${!empty rentMessage}">
+                    <div class="error">${rentMessage}</div>
+                </c:if>
             </div>
             <div class="content_right">
                 <div>
@@ -68,11 +63,11 @@
                 <div>
                     <span>出版日</span>
                     <p>${bookDetailsInfo.publishDate}</p>
-               </div>
+                </div>
                 <div>
                     <span>ISBN</span>
                     <p>${bookDetailsInfo.isbn}</p>
-               </div>
+                </div>
                 <div>
                     <span>説明文</span>
                     <p>${bookDetailsInfo.description}</p>
@@ -82,16 +77,16 @@
         <div class="edtDelBookBtn_box">
             <form method="post" action="rentBook">
                 <button type="submit" value="${bookDetailsInfo.bookId}" name="bookId" class="btn_rentBook">借りる</button>
-               </form>
-            <form method="post" action="returnBook">  
+            </form>
+            <form method="post" action="returnBook">
                 <button type="submit" value="${bookDetailsInfo.bookId}" name="bookId" class="btn_returnBook">返す</button>
-               </form>
-            <form method="post" action="editBook">    
+            </form>
+            <form method="post" action="editBook">
                 <button type="submit" value="${bookDetailsInfo.bookId}" name="bookId" class="btn_editBook">編集</button>
-               </form>
+            </form>
             <form method="post" action="deleteBook">
                 <button type="submit" value="${bookDetailsInfo.bookId}" name="bookId" class="btn_deleteBook">削除</button>
-              </form>  
+            </form>
         </div>
     </main>
 </body>

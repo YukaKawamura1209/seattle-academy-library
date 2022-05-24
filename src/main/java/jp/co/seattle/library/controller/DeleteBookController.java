@@ -53,7 +53,6 @@ public class DeleteBookController {
         	
         }
         
-       
         model.addAttribute("bookList", booksService.getBookList());
    	         return "home";
             

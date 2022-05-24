@@ -42,15 +42,8 @@ public class DetailsController {
         // rentbooksに選択しているbookIdが入っていなければ貸し出し可能
         model.addAttribute("bookDetailsInfo", booksService.getBookInfo(bookId));
         //rentbooksにbookIdがいくつ入っているかを数える数
-        int booklentnumber = booksService.getBooklentnumber (bookId);
-        
-        if (booklentnumber == 0) {
-        	model.addAttribute("statusMessage", "貸出可能");	
-        	 //bookIdが入っていれば貸出不可
-        }else {
-        	model.addAttribute("statusMessage", "貸出中");
-        }
-           
+   
+        System.out.println(booksService.getBookInfo(bookId));
         return "details";
     }
 }
