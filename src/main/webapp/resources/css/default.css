@@ -248,6 +248,16 @@ main {
 main .content_body {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+main .col-5.ml-3 {
+	width:500;
+	border: soild;
+}
+
+main .table>thead{
+	background: #7db4e6;
 }
 
 /* 共通フッター */

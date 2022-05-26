@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jp.co.seattle.library.service.BooksService;
 
@@ -18,7 +17,7 @@ import jp.co.seattle.library.service.BooksService;
  * 詳細表示コントローラー
  */
 @Controller
-public class rentBooksController {
+public class RentHistoryController {
     final static Logger logger = LoggerFactory.getLogger(BooksService.class);
 
     @Autowired
@@ -32,29 +31,13 @@ public class rentBooksController {
      * @return
      */
     @Transactional
-    @RequestMapping(value = "/rentBook", method = RequestMethod.POST)
-    public String rentBook(Locale locale,
-            @RequestParam("bookId") Integer bookId,
-            Model model) {
-        // デバッグ用ログ
-        logger.info("Welcome rentBooksControler.java! The client locale is {}.", locale);
-        
-        int size = booksService.count();
-        booksService.rentBook(bookId);
-        
-        int count = booksService.count();
-        
-        if (size == count) {
-        	model.addAttribute("rentMessage", "貸出済みです");
-
-        }
-        
-        
-        model.addAttribute("bookDetailsInfo" ,booksService.getBookInfo(bookId));
-            return "details";
-
-	}
-
-}
+    @RequestMapping(value = "/rentHistory", method = RequestMethod.GET)
     
-
+    public String rentHistory(Locale locale,Model model){
+    model.addAttribute("bookList",booksService.rentHistory());
+    
+    	return "rentHistory";
+    	
+    	
+    }
+}

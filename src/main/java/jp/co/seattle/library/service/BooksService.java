@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import jp.co.seattle.library.dto.BookDetailsInfo;
 import jp.co.seattle.library.dto.BookInfo;
+import jp.co.seattle.library.dto.RentHistoryInfo;
 import jp.co.seattle.library.rowMapper.BookDetailsInfoRowMapper;
 import jp.co.seattle.library.rowMapper.BookInfoRowMapper;
+import jp.co.seattle.library.rowMapper.RentHistoryInfoRowMapper;
 
 /**
  * 書籍サービス
@@ -56,7 +58,25 @@ public class BooksService {
 
 		return getedBookList;
 	}
+	
+	/**
+	 * 書籍を検索
+	 *
+	 * @param title
+	 * @return 書籍リスト
+	 */
 
+	public List<RentHistoryInfo> rentHistory() {
+
+		// TODO 取得したい情報を取得するようにSQLを修正
+		List<RentHistoryInfo> RentHistoryList = jdbcTemplate.query(
+				"SELECT id, title,rent_date,return_date FROM books INNER join rentbooks on books.id = rentbooks.book_id",
+				 new RentHistoryInfoRowMapper());
+
+		return RentHistoryList;
+		
+	}
+	
     /**
      * 書籍を登録する
      *
@@ -87,9 +107,8 @@ public class BooksService {
 	public BookDetailsInfo getBookInfo(int bookId) {
 
 		// JSPに渡すデータを設定する
-		String sql = "SELECT * FROM books where id =" + bookId;
-
-		BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
+		String sql ="SELECT * , case when rent_date is null then '貸出可' else '貸出不可' end as status from books left outer join rentbooks on books.id = rentbooks.book_id where books.id=" + bookId;
+	    BookDetailsInfo bookDetailsInfo = jdbcTemplate.queryForObject(sql, new BookDetailsInfoRowMapper());
 
 		return bookDetailsInfo;
 	}
@@ -102,7 +121,7 @@ public class BooksService {
 
 	public void Returnbooks(int bookId) {
 
-		String sql = "DELETE  FROM rentbooks WHERE book_id=" + bookId;
+		String sql = "update rentbooks set rent_date = null,return_date = now() where rentbooks.book_id="+bookId+" and return_date is null" ;
 		jdbcTemplate.update(sql);
 
 	}
@@ -122,7 +141,7 @@ public class BooksService {
 	}
 
  public int size (int bookId) {
-	 String sql = "select count (*) from rentbooks WHERE book_id=" + bookId;
+	 String sql = "select count (rent_date) from rentbooks WHERE book_id=" + bookId;
 	 
 	 return jdbcTemplate.queryForObject(sql , int.class);
  
@@ -192,8 +211,7 @@ public class BooksService {
 
 	public void rentBook(int bookId) {
 
-		String sql = "INSERT INTO rentbooks (book_id) select " + bookId
-				+ "where NOT EXISTS (select book_id from rentbooks where book_id=" + bookId + ")";
+		String sql ="insert into rentbooks (book_id,rent_date) values ("+bookId+",now()) on conflict (book_id) do update set return_date=null,rent_date=now();";
 
 		jdbcTemplate.update(sql);
 
@@ -210,10 +228,5 @@ public class BooksService {
 
 		return jdbcTemplate.queryForObject(sql, int.class);
 	}
-
-
-	public int getBooklentnumber(int bookId) {
-		String sql = "select count (*) from rentbooks where book_id=" + bookId;
-		return jdbcTemplate.queryForObject(sql, int.class);
-	}
+	
 }
